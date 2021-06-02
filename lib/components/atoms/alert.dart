@@ -17,13 +17,18 @@ class AlertConfiguration {
   final _onClick;
   VoidCallback? get onClick => _onClick;
 
+  final _onDismiss;
+  VoidCallback? get onDismiss => _onDismiss;
+
   AlertConfiguration({
     required String content,
     required Icon icon,
     VoidCallback? onClick,
+    VoidCallback? onDismiss,
   })  : _content = content,
         _icon = icon,
-        _onClick = onClick;
+        _onClick = onClick,
+        _onDismiss = onDismiss;
 }
 
 class AlertStyle {
@@ -78,40 +83,48 @@ class Alert extends StatelessWidget {
   Alert.info({
     required String content,
     VoidCallback? onClick,
+    VoidCallback? onDismiss,
   })  : _alertConfiguration = AlertConfiguration(
           content: content,
           icon: Icon(Icons.info),
           onClick: onClick,
+          onDismiss: onDismiss,
         ),
         _alertStyle = AlertStyle.info();
 
   Alert.success({
     required String content,
     VoidCallback? onClick,
+    VoidCallback? onDismiss,
   })  : _alertConfiguration = AlertConfiguration(
           content: content,
           icon: Icon(Icons.check_circle),
           onClick: onClick,
+          onDismiss: onDismiss,
         ),
         _alertStyle = AlertStyle.success();
 
   Alert.warning({
     required String content,
     VoidCallback? onClick,
+    VoidCallback? onDismiss,
   })  : _alertConfiguration = AlertConfiguration(
           content: content,
           icon: Icon(Icons.warning_rounded),
           onClick: onClick,
+          onDismiss: onDismiss,
         ),
         _alertStyle = AlertStyle.warning();
 
   Alert.error({
     required String content,
     VoidCallback? onClick,
+    VoidCallback? onDismiss,
   })  : _alertConfiguration = AlertConfiguration(
           content: content,
           icon: Icon(Icons.highlight_off),
           onClick: onClick,
+          onDismiss: onDismiss,
         ),
         _alertStyle = AlertStyle.error();
 
@@ -145,25 +158,28 @@ class Alert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        color: _alertStyle.backgroundColor,
-        boxShadow: alertBoxShadows,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          alertIcon,
-          SizedBox(width: 10),
-          content,
-          SizedBox(width: 10),
-          GestureDetector(
-            onTap: _alertConfiguration.onClick,
-            child: closeIcon,
-          ),
-        ],
+    return GestureDetector(
+      onTap: _alertConfiguration.onClick,
+      child: Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          color: _alertStyle.backgroundColor,
+          boxShadow: alertBoxShadows,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            alertIcon,
+            SizedBox(width: 10),
+            content,
+            SizedBox(width: 10),
+            GestureDetector(
+              onTap: _alertConfiguration.onDismiss,
+              child: closeIcon,
+            ),
+          ],
+        ),
       ),
     );
   }
