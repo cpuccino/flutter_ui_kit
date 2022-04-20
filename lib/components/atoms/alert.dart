@@ -8,16 +8,16 @@ enum AlertType {
 }
 
 class AlertConfiguration {
-  final _content;
+  final String _content;
   String get content => _content;
 
-  final _icon;
+  final Icon _icon;
   Icon get icon => _icon;
 
-  final _onClick;
+  final VoidCallback? _onClick;
   VoidCallback? get onClick => _onClick;
 
-  final _onDismiss;
+  final VoidCallback? _onDismiss;
   VoidCallback? get onDismiss => _onDismiss;
 
   AlertConfiguration({
@@ -31,53 +31,53 @@ class AlertConfiguration {
         _onDismiss = onDismiss;
 }
 
-class AlertStyle {
-  final _contentColor;
-  Color get contentColor => _contentColor;
+class AlertColor {
+  final Color? _contentColor;
+  Color? get contentColor => _contentColor;
 
-  final _iconColor;
-  Color get iconColor => _iconColor;
+  final Color? _iconColor;
+  Color? get iconColor => _iconColor;
 
-  final _backgroundColor;
-  Color get backgroundColor => _backgroundColor;
+  final Color? _backgroundColor;
+  Color? get backgroundColor => _backgroundColor;
 
-  AlertStyle({
-    required Color contentColor,
-    required Color iconColor,
-    required Color backgroundColor,
+  AlertColor({
+    Color? contentColor,
+    Color? iconColor,
+    Color? backgroundColor,
   })  : _contentColor = contentColor,
         _iconColor = iconColor,
         _backgroundColor = backgroundColor;
 
-  AlertStyle.info()
+  AlertColor.info()
       : _contentColor = Color(0xFF575757),
         _iconColor = Color(0xFF4A94EC),
         _backgroundColor = Color(0xFFE9F5FE);
 
-  AlertStyle.success()
+  AlertColor.success()
       : _contentColor = Color(0xFF575757),
         _iconColor = Color(0xFF67AD5B),
         _backgroundColor = Color(0xFFEDFAE1);
 
-  AlertStyle.warning()
+  AlertColor.warning()
       : _contentColor = Color(0xFF575757),
         _iconColor = Color(0xFFF5B63F),
         _backgroundColor = Color(0xFFFFF9E6);
 
-  AlertStyle.error()
+  AlertColor.error()
       : _contentColor = Color(0xFF575757),
         _iconColor = Color(0xFFE15141),
         _backgroundColor = Color(0xFFFDE9EF);
 }
 
 class Alert extends StatelessWidget {
-  final AlertStyle _alertStyle;
+  final AlertColor _alertColor;
   final AlertConfiguration _alertConfiguration;
 
   Alert({
-    required AlertStyle alertStyle,
+    required AlertColor alertColor,
     required AlertConfiguration alertConfiguration,
-  })  : _alertStyle = alertStyle,
+  })  : _alertColor = alertColor,
         _alertConfiguration = alertConfiguration;
 
   Alert.info({
@@ -90,7 +90,7 @@ class Alert extends StatelessWidget {
           onClick: onClick,
           onDismiss: onDismiss,
         ),
-        _alertStyle = AlertStyle.info();
+        _alertColor = AlertColor.info();
 
   Alert.success({
     required String content,
@@ -102,7 +102,7 @@ class Alert extends StatelessWidget {
           onClick: onClick,
           onDismiss: onDismiss,
         ),
-        _alertStyle = AlertStyle.success();
+        _alertColor = AlertColor.success();
 
   Alert.warning({
     required String content,
@@ -114,7 +114,7 @@ class Alert extends StatelessWidget {
           onClick: onClick,
           onDismiss: onDismiss,
         ),
-        _alertStyle = AlertStyle.warning();
+        _alertColor = AlertColor.warning();
 
   Alert.error({
     required String content,
@@ -126,29 +126,29 @@ class Alert extends StatelessWidget {
           onClick: onClick,
           onDismiss: onDismiss,
         ),
-        _alertStyle = AlertStyle.error();
+        _alertColor = AlertColor.error();
 
-  Icon get alertIcon => Icon(
+  Icon _getAlertIcon() => Icon(
         _alertConfiguration.icon.icon,
-        color: _alertStyle.iconColor,
+        color: _alertColor.iconColor,
         size: 18,
       );
 
-  Text get content => Text(
+  Text _getContent() => Text(
         _alertConfiguration.content,
         style: TextStyle(
-          color: _alertStyle.contentColor,
+          color: _alertColor.contentColor,
           fontSize: 14,
         ),
       );
 
-  Icon get closeIcon => Icon(
+  Icon _getCloseIcon() => Icon(
         Icons.close,
-        color: _alertStyle.iconColor,
+        color: _alertColor.iconColor,
         size: 17,
       );
 
-  List<BoxShadow> get alertBoxShadows => [
+  List<BoxShadow> _getBoxShadows() => [
         BoxShadow(
           offset: Offset(4, 4),
           blurRadius: 4,
@@ -164,19 +164,19 @@ class Alert extends StatelessWidget {
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
-          color: _alertStyle.backgroundColor,
-          boxShadow: alertBoxShadows,
+          color: _alertColor.backgroundColor,
+          boxShadow: _getBoxShadows(),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            alertIcon,
+            _getAlertIcon(),
             SizedBox(width: 10),
-            content,
+            _getContent(),
             SizedBox(width: 10),
             GestureDetector(
               onTap: _alertConfiguration.onDismiss,
-              child: closeIcon,
+              child: _getCloseIcon(),
             ),
           ],
         ),

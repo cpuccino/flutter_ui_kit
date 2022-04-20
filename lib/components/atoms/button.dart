@@ -87,62 +87,80 @@ class Button extends StatelessWidget {
   final ButtonColor _buttonColor;
   final ButtonConfiguration _buttonConfiguration;
   final ButtonSize _buttonSize;
+  final List<ButtonState> _buttonStates;
+  final bool _disabled;
 
   Button({
     required ButtonColor buttonColor,
     required ButtonConfiguration buttonConfiguration,
     ButtonSize buttonSize = ButtonSize.regular,
+    List<ButtonState> buttonStates = const [ButtonState.regular],
+    bool disabled = false,
   })  : _buttonColor = buttonColor,
         _buttonConfiguration = buttonConfiguration,
-        _buttonSize = buttonSize;
+        _buttonSize = buttonSize,
+        _buttonStates = buttonStates,
+        _disabled = disabled;
 
   Button.primary({
     required String content,
     VoidCallback? onClick,
     ButtonSize buttonSize = ButtonSize.regular,
     List<ButtonState> buttonStates = const [ButtonState.regular],
+    bool disabled = false,
   })  : _buttonColor = ButtonColor.primary(buttonStates: buttonStates),
         _buttonConfiguration = ButtonConfiguration(
           content: content,
           onClick: onClick,
         ),
-        _buttonSize = buttonSize;
+        _buttonSize = buttonSize,
+        _buttonStates = buttonStates,
+        _disabled = disabled;
 
   Button.secondary({
     required String content,
     VoidCallback? onClick,
     ButtonSize buttonSize = ButtonSize.regular,
     List<ButtonState> buttonStates = const [ButtonState.regular],
+    bool disabled = false,
   })  : _buttonColor = ButtonColor.secondary(buttonStates: buttonStates),
         _buttonConfiguration = ButtonConfiguration(
           content: content,
           onClick: onClick,
         ),
-        _buttonSize = buttonSize;
+        _buttonSize = buttonSize,
+        _buttonStates = buttonStates,
+        _disabled = disabled;
 
   Button.subdued({
     required String content,
     VoidCallback? onClick,
     ButtonSize buttonSize = ButtonSize.regular,
     List<ButtonState> buttonStates = const [ButtonState.regular],
+    bool disabled = false,
   })  : _buttonColor = ButtonColor.subdued(buttonStates: buttonStates),
         _buttonConfiguration = ButtonConfiguration(
           content: content,
           onClick: onClick,
         ),
-        _buttonSize = buttonSize;
+        _buttonSize = buttonSize,
+        _buttonStates = buttonStates,
+        _disabled = disabled;
 
   Button.outline({
     required String content,
     VoidCallback? onClick,
     ButtonSize buttonSize = ButtonSize.regular,
     List<ButtonState> buttonStates = const [ButtonState.regular],
+    bool disabled = false,
   })  : _buttonColor = ButtonColor.outline(buttonStates: buttonStates),
         _buttonConfiguration = ButtonConfiguration(
           content: content,
           onClick: onClick,
         ),
-        _buttonSize = buttonSize;
+        _buttonSize = buttonSize,
+        _buttonStates = buttonStates,
+        _disabled = disabled;
 
   double _getPadding() {
     if (_buttonSize == ButtonSize.xsmall) return 8;
@@ -160,12 +178,21 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return RawMaterialButton(
+      onPressed: _buttonConfiguration.onClick,
+      fillColor: _buttonColor.backgroundColor,
+      splashColor: null,
+      highlightColor: Colors.blue[100],
+      elevation: 0,
+      hoverElevation: 0,
+      focusElevation: 0,
+      highlightElevation: 0,
       padding: EdgeInsets.all(_getPadding()),
-      decoration: BoxDecoration(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
-        color: _buttonColor.backgroundColor,
-        border: Border.all(color: _buttonColor.outlineColor ?? Color(0x00000000)),
+        side: BorderSide(
+          color: _buttonColor.outlineColor ?? Color(0x00000000),
+        ),
       ),
       child: Text(
         _buttonConfiguration.content,
@@ -175,5 +202,42 @@ class Button extends StatelessWidget {
         ),
       ),
     );
+    // return Container(
+    //   decoration: BoxDecoration(
+    //     borderRadius: BorderRadius.circular(10),
+    //     color: _buttonColor.backgroundColor,
+    //     border: Border.all(color: _buttonColor.outlineColor ?? Color(0x00000000)),
+    //   ),
+    //   padding: EdgeInsets.all(_getPadding()),
+    //   child: RawMaterialButton(
+    //     onPressed: _disabled ? null : _buttonConfiguration.onClick,
+    //     // fillColor: _buttonColor.backgroundColor,
+
+    //     child: Text(
+    //       _buttonConfiguration.content,
+    //       style: TextStyle(
+    //         color: _buttonColor.contentColor,
+    //         fontSize: _getFontSize(),
+    //       ),
+    //     ),
+
+    //     // padding: ,
+
+    //     //   child: Container(
+    //     //     padding: EdgeInsets.all(_getPadding()),
+    //     //     decoration: BoxDecoration(
+    //     //       borderRadius: BorderRadius.circular(10),
+    //     //       color: _buttonColor.backgroundColor,
+    //     //       border: Border.all(color: _buttonColor.outlineColor ?? Color(0x00000000)),
+    //     //     ),
+    //     //     child: Text(
+    //     //       _buttonConfiguration.content,
+    //     //       style: TextStyle(
+    //     //         color: _buttonColor.contentColor,
+    //     //         fontSize: _getFontSize(),
+    //     //       ),
+    //     //     ),
+    //     //   ),
+    //   ),
   }
 }
